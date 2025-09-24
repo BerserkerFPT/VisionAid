@@ -1,6 +1,7 @@
 """
-Vision to Speech - Simple API for converting images to speech
-Refactored from EXE.ipynb for easy reuse by backend developers
+VisionAid - Vision to Speech API
+Simple and powerful API for converting images to speech, designed to help visually impaired people
+access visual information through audio.
 """
 import os
 import time
@@ -12,8 +13,15 @@ from google.genai import types
 
 class VTS:
     """
-    Vision to Speech - Convert images to audio files
-    Simple API that takes image path and outputs WAV file
+    VisionAid Vision to Speech - Convert images to audio files
+    
+    A simple yet powerful API that converts images to WAV audio files,
+    specifically designed to help visually impaired people access visual information.
+    
+    Features:
+    - Smart image analysis using Google Gemini AI
+    - Natural Vietnamese text-to-speech using FPT.AI
+    - OCR for documents and contextual description for scenes
     """
     
     def __init__(self, gemini_api_key: str, fpt_api_key: str, voice: str = "banmai"):

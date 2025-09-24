@@ -1,8 +1,17 @@
-# Vision to Speech (VTS) API
+# 👁️‍🗨️ VisionAid - Vision to Speech (VTS) API
 
-Một API đơn giản để chuyển đổi hình ảnh thành âm thanh cho người khiếm thị.
+![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)
+![AI](https://img.shields.io/badge/AI-Google%20Gemini-orange.svg)
+![TTS](https://img.shields.io/badge/TTS-FPT.AI-green.svg)
+![Accessibility](https://img.shields.io/badge/Accessibility-♿-purple.svg)
 
-## 🎯 Tính năng
+VisionAid là một API đơn giản và mạnh mẽ để chuyển đổi hình ảnh thành âm thanh, được thiết kế đặc biệt để hỗ trợ người khiếm thị tiếp cận thông tin hình ảnh một cách dễ dàng.
+
+## � Về VisionAid
+
+VisionAid sử dụng công nghệ AI tiên tiến để biến hình ảnh thành những mô tả âm thanh chi tiết, giúp người khiếm thị có thể "nhìn" thấy thế giới xung quanh thông qua âm thanh. Dự án kết hợp Google Gemini AI để phân tích hình ảnh và FPT.AI TTS để tạo ra giọng nói tự nhiên bằng tiếng Việt.
+
+## �🎯 Tính năng
 
 - **Phân tích ảnh thông minh**: Sử dụng Google Gemini AI để:
   - OCR tài liệu và format lại nội dung
@@ -168,11 +177,11 @@ vts = VTS(
 ## 📁 Cấu trúc file
 
 ```
-EXE201/
+VisionAid/
 ├── vision_to_speech.py    # Main API file
 ├── demo.py               # Demo usage
 ├── requirements.txt      # Dependencies
-├── .env.example          # API keys template
+├── LICENSE               # License file
 └── README.md            # Documentation
 ```
 
@@ -200,9 +209,24 @@ result = vts.convert("image.jpg", "output.wav", wait_time=20)
 ### Lỗi API key
 Kiểm tra API keys hợp lệ và còn quota.
 
-## 📞 Support
+## 🤝 Đóng góp cho VisionAid
+
+VisionAid là một dự án mã nguồn mở nhằm hỗ trợ cộng đồng người khiếm thị. Chúng tôi hoan nghênh mọi đóng góp:
+
+- 🐛 Báo cáo lỗi và đề xuất tính năng
+- 💡 Cải thiện thuật toán phân tích hình ảnh  
+- 🌍 Hỗ trợ thêm ngôn ngữ khác
+- � Cập nhật documentation
+- 🎯 Tối ưu hiệu suất và độ chính xác
+
+## �📞 Support
 
 Nếu gặp vấn đề, vui lòng:
 1. Kiểm tra API keys và network connection
 2. Xem log error chi tiết trong response
 3. Tham khảo documentation của [Google Gemini](https://ai.google.dev/) và [FPT.AI](https://fpt.ai/)
+4. Tạo issue trên GitHub repository để được hỗ trợ
+
+---
+
+**VisionAid** - Mang ánh sáng đến cho thế giới thông qua công nghệ 🌟

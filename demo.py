@@ -1,18 +1,46 @@
 """
-Demo sử dụng vision_to_speech.py
+Demo sử dụng VisionAid - vision_to_speech.py
 """
+import os
 from vision_to_speech import VTS
 
+# Load environment variables from .env file
+def load_env():
+    """Load environment variables from .env file"""
+    env_path = ".env"
+    if os.path.exists(env_path):
+        with open(env_path, 'r') as file:
+            for line in file:
+                if '=' in line and not line.strip().startswith('#'):
+                    key, value = line.strip().split('=', 1)
+                    os.environ[key] = value
+
 def main():
-    # Khởi tạo với API keys (thay thế bằng API keys thực tế)
+    # Load environment variables from .env file
+    load_env()
+    
+    # Khởi tạo với API keys từ environment variables
+    gemini_key = os.getenv("GEMINI_API_KEY")
+    fpt_key = os.getenv("FPT_API_KEY")
+    
+    if not gemini_key or gemini_key == "YOUR_GEMINI_API_KEY_HERE":
+        print("❌ Error: Please set your GEMINI_API_KEY in .env file")
+        print("💡 Copy .env.example to .env and add your real API keys")
+        return
+        
+    if not fpt_key or fpt_key == "YOUR_FPT_API_KEY_HERE":
+        print("❌ Error: Please set your FPT_API_KEY in .env file")
+        print("💡 Copy .env.example to .env and add your real API keys")
+        return
+    
     vts = VTS(
-        gemini_api_key="AIzaSyBrlp7XaKUwZTjGJovioB08Dw3KgnDdnKQ",  # API key từ EXE.ipynb
-        fpt_api_key="OCAAgYnKtkjwxWYDgnvPwhQNyccmEkca",          # API key từ EXE.ipynb
-        voice="banmai"
+        gemini_api_key=gemini_key,
+        fpt_api_key=fpt_key,
+        voice=os.getenv("DEFAULT_VOICE", "banmai")
     )
     
-    # Đường dẫn ảnh từ EXE.ipynb
-    image_path = r"G:\My Drive\DSP391m\481191925_1249528846840541_6357321759927879116_n.jpg"
+    # Đường dẫn ảnh để test (thay bằng đường dẫn ảnh thực tế của bạn)
+    image_path = r"G:\My Drive\DSP391m\481191925_1249528846840541_6357321759927879116_n.jpg"  # Thay bằng đường dẫn ảnh thực tế
     output_path = "output.wav"
     
     print("🚀 Starting image to speech conversion...")
@@ -41,6 +69,7 @@ def main():
         print(f"Error: {result['error']}")
     
     print("\n🎯 Demo completed!")
+    print("\n💡 Tip: Create a .env file from .env.example to store your API keys securely!")
 
 if __name__ == "__main__":
     main()
