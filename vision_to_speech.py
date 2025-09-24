@@ -40,16 +40,21 @@ class VTS:
         
         # Default prompt giống như trong EXE.ipynb
         self.prompt = """
-Bạn là trợ lý hỗ trợ người khiếm thị.
-Hãy phân loại ảnh thành một trong hai loại:
-- [Tài liệu]: Nếu bức ảnh là tài liệu/trang giấy → OCR toàn bộ nội dung và format lại nội dung đó cho hoàn chỉnh, chỉnh chu và ngăn nắp, không tóm tắt.
-- [Ngữ cảnh]: Nếu bức ảnh là cảnh vật/bối cảnh → chỉ cần miêu tả tóm tắt tổng thể.
-Trả kết quả theo format:
+Nhiệm vụ:
+1. Phân loại ảnh thành một trong hai loại:
+   - [Tài liệu]: Nếu bức ảnh là tài liệu/trang giấy → OCR toàn bộ nội dung và format lại nội dung đó cho hoàn chỉnh, chỉnh chu và ngăn nắp, không tóm tắt.
+   - [Ngữ cảnh]: Nếu bức ảnh là cảnh vật/bối cảnh → miêu tả tóm tắt tổng thể.
+
+2. Nếu thể loại là [Ngữ cảnh], hãy kiểm tra và cảnh báo nếu phát hiện VẬT THỂ NGUY HIỂM (ví dụ: lửa, dao, phương tiện đang di chuyển, hố sâu, vũ khí...).
+   - Nếu có nguy hiểm → thêm mục "⚠️ Cảnh báo: ..." với nội dung rõ ràng, súc tích.
+   - Nếu không có nguy hiểm → ghi "Không phát hiện nguy hiểm."
+
+Format trả kết quả:
 Thể loại: [Tài liệu hoặc Ngữ cảnh]
 Nội dung: <nội dung tương ứng>
 """
     
-    def convert(self, image_path: str, output_wav_path: str, wait_time: int = 10) -> Dict[str, Any]:
+    def convert(self, image_path: str, output_wav_path: str, wait_time: int = 15) -> Dict[str, Any]:
         """
         Convert image to speech WAV file
         
@@ -122,20 +127,41 @@ Nội dung: <nội dung tương ứng>
             audio_url = res_json["async"]
             print(f"🔗 Audio URL: {audio_url}")
             
-            # Wait for audio generation
-            print(f"⏳ Waiting {wait_time} seconds for audio generation...")
-            time.sleep(wait_time)
-            
-            # Download audio file
-            audio_response = requests.get(audio_url)
-            
-            if audio_response.status_code != 200:
+            # Validate URL format
+            if not audio_url.startswith("http"):
                 return {
                     "success": False,
-                    "error": f"Failed to download audio: {audio_response.status_code}",
+                    "error": f"Invalid audio URL format: {audio_url}",
                     "text_result": text_result,
                     "audio_path": None
                 }
+            
+            # Wait for audio generation with retry mechanism
+            print(f"⏳ Waiting for audio generation...")
+            max_retries = 3
+            retry_delay = wait_time
+            
+            for attempt in range(max_retries):
+                print(f"🔄 Attempt {attempt + 1}/{max_retries} - Waiting {retry_delay} seconds...")
+                time.sleep(retry_delay)
+                
+                # Download audio file
+                audio_response = requests.get(audio_url)
+                
+                if audio_response.status_code == 200:
+                    break
+                elif audio_response.status_code == 404 and attempt < max_retries - 1:
+                    print(f"⚠️ Audio not ready yet (404), retrying in {retry_delay} more seconds...")
+                    retry_delay += 5  # Increase wait time for next attempt
+                    continue
+                else:
+                    return {
+                        "success": False,
+                        "error": f"Failed to download audio after {max_retries} attempts. Last status: {audio_response.status_code}",
+                        "text_result": text_result,
+                        "audio_path": None,
+                        "audio_url": audio_url
+                    }
             
             # Create output directory if needed
             output_dir = os.path.dirname(output_wav_path)

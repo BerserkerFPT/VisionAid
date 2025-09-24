@@ -40,7 +40,7 @@ def main():
     )
     
     # Đường dẫn ảnh để test (thay bằng đường dẫn ảnh thực tế của bạn)
-    image_path = r"G:\My Drive\DSP391m\481191925_1249528846840541_6357321759927879116_n.jpg"  # Thay bằng đường dẫn ảnh thực tế
+    image_path = r"C:\Users\Acer\Pictures\download (1).jpg"  # Thay bằng đường dẫn ảnh thực tế
     output_path = "output.wav"
     
     print("🚀 Starting image to speech conversion...")
@@ -49,7 +49,7 @@ def main():
     result = vts.convert(
         image_path=image_path,
         output_wav_path=output_path,
-        wait_time=10
+        wait_time=15
     )
     
     # Hiển thị kết quả
